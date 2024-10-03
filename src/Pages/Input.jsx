@@ -3,7 +3,7 @@ import "../App.css";
 import axios from "axios"; // npm i axios
 import {useNavigate} from "react-router-dom"; //   npm install react-router-dom
 
-export default function Input ( {
+export default function Input({
   backendurl,
   setToken,
   MerchantID,
@@ -12,34 +12,32 @@ export default function Input ( {
 }) {
   const navigate = useNavigate();
   const Timestamp = Math.floor(Date.now() / 1000);
-  const MerchantMemberID = "member3002607";
+  const [MerchantMemberID, setMerchantMemberID] = useState("");
 
   const [Unit, setUnit] = useState(1);
   const [TotalAmount, setTotalAmount] = useState(100);
   const [Name, setName] = useState("測試帳號三");
   const [Phone, setPhone] = useState("0912345678");
   const [Email, setEmail] = useState("3002607@test.com");
-  const [RememberCard, setRememberCard] = useState(0);
   const [isClicked, setIsClicked] = useState(false);
   const price = 100;
-  const PaymentUIType = 2;
-  const ChoosePaymentList = 0;
+  const OrderResultURL = `${backendurl}/OrderResultURL`;
   const ReturnURL = "https://www.ecpay.com.tw/";
   const latestMerchantTradeNo = `emb${getCurrentTime().string}`;
   const MerchantTradeDate = `${getCurrentTime().time}`;
-   //const OrderResultURL = "http://localhost:5173/OrderResultURL";
-  const OrderResultURL = `${backendurl}/OrderResultURL`;
-  const TradeDesc = "站內付 2.0 範例";
+  const TradeDesc = "站內付 2.0 綁定信用卡範例";
   const ItemName = "測試商品";
-  const CreditInstallment = "3,6,12,18,24";
-  const ExpireDate = 3;
-  const StoreExpireDate_CVS = 10080;
-  const StoreExpireDate_BARCODE = 7;
+
   const Data = {
     MerchantID: MerchantID,
-    RememberCard: RememberCard,
-    PaymentUIType: PaymentUIType,
-    ChoosePaymentList: ChoosePaymentList,
+
+    ConsumerInfo: {
+      MerchantMemberID: MerchantMemberID,
+      Name: Name,
+      Phone: Phone,
+      Email: Email
+    },
+
     OrderInfo: {
       MerchantTradeDate: MerchantTradeDate,
       MerchantTradeNo: latestMerchantTradeNo,
@@ -48,28 +46,10 @@ export default function Input ( {
       ItemName: ItemName,
       ReturnURL: ReturnURL
     },
-    CardInfo: {
-      OrderResultURL: OrderResultURL,
-      CreditInstallment: CreditInstallment
-    },
-    UnionPayInfo: {OrderResultURL: OrderResultURL},
-    ATMInfo: {
-      ExpireDate: ExpireDate
-    },
-    CVSInfo: {
-      StoreExpireDate: StoreExpireDate_CVS
-    },
-    BARCODEInfo: {
-      StoreExpireDate: StoreExpireDate_BARCODE
-    },
-    ConsumerInfo: {
-      MerchantMemberID: MerchantMemberID,
-      Name: Name,
-      Phone: Phone,
-      Email: Email
-    }
+    CreditInstallment: "3,6,9,12",
+    OrderResultURL: OrderResultURL
   };
-  const GetTokenByTradePayload = {
+  const GetTokenByBindingCardPayload = {
     MerchantID: MerchantID,
     RqHeader: {Timestamp: Timestamp},
     Data: Data
@@ -80,9 +60,9 @@ export default function Input ( {
     setIsClicked(true);
     try {
       const response = await axios.post(
-        "https://ecpay-embedded-checkout-backend.vercel.app/GetTokenbyTrade",
-        //"http://localhost:3000/GetTokenbyTrade",
-        GetTokenByTradePayload
+        `${backendurl}/GetTokenbyBindingCard`,
+
+        GetTokenByBindingCardPayload
       );
 
       setToken(response.data);
@@ -153,30 +133,6 @@ export default function Input ( {
               value={Email}
             />
           </p>
-
-          <div>是否記憶信用卡卡號</div>
-          <form>
-            <label className="hover_radio">
-              <input
-                type="radio"
-                name="RememberCard"
-                value="1"
-                checked={RememberCard === 1}
-                onChange={() => setRememberCard(1)}
-              />
-              是
-            </label>
-            <label className="hover_radio">
-              <input
-                type="radio"
-                name="RememberCard"
-                value="0"
-                checked={RememberCard === 0}
-                onChange={() => setRememberCard(0)}
-              />
-              否
-            </label>
-          </form>
         </div>
         <button
           onClick={handleSubmit}

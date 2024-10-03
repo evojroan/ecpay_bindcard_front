@@ -10,8 +10,7 @@ export default function Payment({
   Token,
   Language,
   ServerType,
-  IsLoading,
-  Version
+  IsLoading
 }) {
   const navigate = useNavigate();
 
@@ -28,7 +27,7 @@ export default function Payment({
     MerchantTradeNo: MerchantTradeNo
   };
 
-  const CreatePaymentPayload = {
+  const addBindingCardPayload = {
     MerchantID: MerchantID,
     RqHeader: {Timestamp: Timestamp},
     Data: Data
@@ -40,42 +39,32 @@ export default function Payment({
         if (errMsg) {
           console.error(errMsg);
         } else {
-          window.ECPay.createPayment(
-            Token,
-            Language,
-            function (errMsg) {
-              if (errMsg) {
-                console.error(errMsg);
-              } else {
-                setPaymentRendered(true);
-                window.ECPayInitialized = true; // 標記為已初始化
-              }
-            },
-            Version
-          );
+          window.ECPay.addBindingCard(Token, Language, function (errMsg) {
+            if (errMsg) {
+              console.error(errMsg);
+            } else {
+              setPaymentRendered(true);
+              window.ECPayInitialized = true; // 標記為已初始化
+            }
+          });
         }
       });
     } else {
-      // 如果已經初始化，直接呼叫 createPayment
-      window.ECPay.createPayment(
-        Token,
-        Language,
-        function (errMsg) {
-          if (errMsg) {
-            console.error(errMsg);
-          } else {
-            setPaymentRendered(true);
-          }
-        },
-        Version
-      );
+      // 如果已經初始化，直接呼叫 addBindingCard
+      window.ECPay.addBindingCard(Token, Language, function (errMsg) {
+        if (errMsg) {
+          console.error(errMsg);
+        } else {
+          setPaymentRendered(true);
+        }
+      });
     }
-  }, [Token, Language, ServerType, IsLoading, Version]);
+  }, [Token, Language, ServerType, IsLoading]);
 
   //等待取得 Paytoken
   useEffect(() => {
     if (PayToken) {
-      handleCreatePayment();
+      handleAddBindingCard();
     }
   }, [PayToken]); //useCallback 尚待解決
 
@@ -88,13 +77,13 @@ export default function Payment({
     }
   }, [ThreeDURL, UnionPayURL]);
 
-  //取得 Paytoken 後，立即以 CreatePaymentPayload 呼叫後端
-  async function handleCreatePayment() {
+  //取得 Paytoken 後，立即以 addBindingCardPayload 呼叫後端
+  async function handleAddBindingCard() {
     try {
       const response = await axios.post(
-        `${backendurl}/CreatePayment`,
-        //"http://localhost:3000/CreatePayment",
-        CreatePaymentPayload
+        `${backendurl}/addBindingCard`,
+        //"http://localhost:3000/addBindingCard",
+        addBindingCardPayload
       );
       if (response.data.ThreeDInfo.ThreeDURL) {
         setThreeDURL(response.data.ThreeDInfo.ThreeDURL);
@@ -105,15 +94,15 @@ export default function Payment({
         navigate("/PaymentInfoPage");
       }
 
-      //CreatePayment 還要 3D 驗證。
+      //addBindingCard 還要 3D 驗證。
     } catch (error) {
       console.error(error);
     }
   }
 
-  //SDK 取得 Paytoken
-  function handleGetPayToken() {
-    ECPay.getPayToken(function (paymentInfo, errMsg) {
+  //SDK 取得 BindingCardPaytoken
+  function handleGetBindCardPayToken() {
+    ECPay.GetBindCardPayToken(function (paymentInfo, errMsg) {
       if (errMsg) {
         console.error(errMsg);
         return;
@@ -131,7 +120,7 @@ export default function Payment({
         <div id="ECPayPayment"> </div>
         {paymentRendered && (
           <button
-            onClick={handleGetPayToken}
+            onClick={handleGetBindCardPayToken}
             disabled={isClicked}>
             {isClicked ? "付款中" : "付款"}
           </button>
