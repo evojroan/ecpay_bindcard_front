@@ -23,6 +23,7 @@ export default function App() {
   }
 
   const [MerchantID, setMerchantID] = useState("3002607");
+  const [MerchantMemberID, setMerchantMemberID] = useState("3002607");
   const [Token, setToken] = useState("");
   const [Language, setLanguage] = useState(ECPay.Language.zhTW); //ECPay.Language.enUS
   const [ServerType, setServerType] = useState("Stage");
@@ -42,6 +43,8 @@ export default function App() {
               backendurl={backendurl}
               setToken={setToken}
               MerchantID={MerchantID}
+              MerchantMemberID={MerchantMemberID}
+              setMerchantMemberID={setMerchantMemberID}
               setMerchantID={setMerchantID}
               getCurrentTime={getCurrentTime}
               setMerchantTradeNo={setMerchantTradeNo}
@@ -61,6 +64,7 @@ export default function App() {
               Language={Language}
               ServerType={ServerType}
               IsLoading={IsLoading}
+              MerchantMemberID={MerchantMemberID}
              
             />
           }

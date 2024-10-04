@@ -5,7 +5,7 @@ import {useNavigate} from "react-router-dom"; //   npm i react-router-dom
 export default function Payment({
   backendurl,
   MerchantID,
-  MerchantTradeNo,
+  MerchantMemberID,
   setPaymentInfo,
   Token,
   Language,
@@ -16,18 +16,18 @@ export default function Payment({
 
   const [paymentRendered, setPaymentRendered] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
-  const [PayToken, setPayToken] = useState("");
+  const [BindCardPayToken, setBindCardPayToken] = useState("");
   const [ThreeDURL, setThreeDURL] = useState("");
   const [UnionPayURL, setUnionPayURL] = useState("");
   const Timestamp = Math.floor(Date.now() / 1000);
   const Data = {
     PlatformID: "",
     MerchantID: MerchantID,
-    PayToken: PayToken,
-    MerchantTradeNo: MerchantTradeNo
+    BindCardPayToken: BindCardPayToken,
+    MerchantMemberID: MerchantMemberID
   };
 
-  const addBindingCardPayload = {
+  const CreateBindCardPayload = {
     MerchantID: MerchantID,
     RqHeader: {Timestamp: Timestamp},
     Data: Data
@@ -63,10 +63,10 @@ export default function Payment({
 
   //等待取得 Paytoken
   useEffect(() => {
-    if (PayToken) {
+    if (BindCardPayToken) {
       handleAddBindingCard();
     }
-  }, [PayToken]); //useCallback 尚待解決
+  }, [BindCardPayToken]); //useCallback 尚待解決
 
   //等待取得 ThreeDURL
   useEffect(() => {
@@ -79,11 +79,14 @@ export default function Payment({
 
   //取得 Paytoken 後，立即以 addBindingCardPayload 呼叫後端
   async function handleAddBindingCard() {
+
+    console.log("CreateBindCardPayload為：",CreateBindCardPayload)
+
     try {
       const response = await axios.post(
-        `${backendurl}/addBindingCard`,
+        `${backendurl}/CreateBindCard`,
         //"http://localhost:3000/addBindingCard",
-        addBindingCardPayload
+        CreateBindCardPayload
       );
       if (response.data.ThreeDInfo.ThreeDURL) {
         setThreeDURL(response.data.ThreeDInfo.ThreeDURL);
@@ -102,19 +105,19 @@ export default function Payment({
 
   //SDK 取得 BindingCardPaytoken
   function handleGetBindCardPayToken() {
-    ECPay.GetBindCardPayToken(function (paymentInfo, errMsg) {
+    ECPay.getBindCardPayToken(function (BindCardPayToken, errMsg) {
       if (errMsg) {
         console.error(errMsg);
         return;
       }
-      setPayToken(paymentInfo.PayToken);
+      setBindCardPayToken(BindCardPayToken.BindCardPayToken);
       setIsClicked(true);
     });
   }
 
   return (
     <div>
-      <h2>綠界站內付 2.0 付款畫面</h2>
+      <h2>綠界站內付 2.0 綁定信用卡畫面</h2>
 
       <div id="PaymentComponent">
         <div id="ECPayPayment"> </div>

@@ -7,12 +7,14 @@ export default function Input({
   backendurl,
   setToken,
   MerchantID,
+  MerchantMemberID,
   getCurrentTime,
-  setMerchantTradeNo
+  setMerchantTradeNo,
+  setMerchantMemberID,
 }) {
   const navigate = useNavigate();
   const Timestamp = Math.floor(Date.now() / 1000);
-  const [MerchantMemberID, setMerchantMemberID] = useState("");
+  
 
   const [Unit, setUnit] = useState(1);
   const [TotalAmount, setTotalAmount] = useState(100);
@@ -46,7 +48,7 @@ export default function Input({
       ItemName: ItemName,
       ReturnURL: ReturnURL
     },
-    CreditInstallment: "3,6,9,12",
+   
     OrderResultURL: OrderResultURL
   };
   const GetTokenByBindingCardPayload = {
@@ -108,6 +110,16 @@ export default function Input({
               maxLength="50"
               onChange={e => setName(e.target.value)}
               value={Name}
+            />
+          </p>
+          <p>
+            <label>消費者會員編號</label>
+            <input
+              id="MerchantMemberID"
+              type="text"
+              maxLength="60"
+              onChange={e => setMerchantMemberID(e.target.value)}
+              value={MerchantMemberID}
             />
           </p>
           <p>
