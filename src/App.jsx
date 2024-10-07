@@ -5,7 +5,7 @@ import {useState} from "react";
 import Input from "./Pages/Input";
 import Payment from "./Pages/Payment";
 import OrderResultURL from "./Pages/OrderResultURL";
-import PaymentInfoPage from "./Pages/PaymentInfoPage";
+
 
 export default function App() {
   function getCurrentTime() {
