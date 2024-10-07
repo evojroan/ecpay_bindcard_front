@@ -6,7 +6,7 @@ export default function Payment({
   backendurl,
   MerchantID,
   MerchantMemberID,
-  setPaymentInfo,
+
   Token,
   Language,
   ServerType,
@@ -92,11 +92,7 @@ export default function Payment({
         setThreeDURL(response.data.ThreeDInfo.ThreeDURL);
       } else if (response.data.UnionPayInfo.UnionPayURL) {
         setUnionPayURL(response.data.UnionPayInfo.UnionPayURL);
-      } else {
-        setPaymentInfo(response.data);
-        navigate("/PaymentInfoPage");
-      }
-
+      } 
       //addBindingCard 還要 3D 驗證。
     } catch (error) {
       console.error(error);

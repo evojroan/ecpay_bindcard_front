@@ -28,7 +28,7 @@ export default function App() {
   const [Language, setLanguage] = useState(ECPay.Language.zhTW); //ECPay.Language.enUS
   const [ServerType, setServerType] = useState("Stage");
   const [IsLoading, setIsLoading] = useState(1);
-  const [PaymentInfo, setPaymentInfo] = useState("");
+  
   const [MerchantTradeNo, setMerchantTradeNo] = useState("");
    const backendurl = "ecpay-bindcard-back.vercel.app";
   //const backendurl = "http://localhost:3000";
@@ -59,7 +59,7 @@ export default function App() {
               MerchantID={MerchantID}
               setMerchantTradeNo={setMerchantTradeNo}
               MerchantTradeNo={MerchantTradeNo}
-              setPaymentInfo={setPaymentInfo}
+             
               Token={Token}
               Language={Language}
               ServerType={ServerType}
@@ -73,10 +73,7 @@ export default function App() {
           path="/OrderResultURL"
           element={<OrderResultURL backendurl={backendurl} />}
         />
-        <Route
-          path="/PaymentInfoPage"
-          element={<PaymentInfoPage PaymentInfo={PaymentInfo} />}
-        />
+        
       </Routes>
     </Router>
   );
