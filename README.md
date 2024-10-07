@@ -8,7 +8,7 @@
 
 前端頁面：
 
-後端 Repo：
+後端 Repo：https://github.com/evojroan/ecpay_bindcard_back
 
 ## 待完成、優化功能
 
@@ -37,5 +37,5 @@ useEffect(() => {
 
 ### 整理管理
 
-- [ ] 1. 用 Reducer 管理所有狀態
-- [ ] 2. 用 useContext 傳遞狀態
+- [ ] 1. 用 Redux 管理所有狀態
+
