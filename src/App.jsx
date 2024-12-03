@@ -2,6 +2,7 @@
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 
 import {useState} from "react";
+import Welcome from "./Pages/Welcome";
 import Input from "./Pages/Input";
 import Payment from "./Pages/Payment";
 import OrderResultURL from "./Pages/OrderResultURL";
@@ -23,19 +24,25 @@ export default function App() {
   }
 
   const [MerchantID, setMerchantID] = useState("3002607");
-  const [MerchantMemberID, setMerchantMemberID] = useState("3002607");
+  const [MerchantMemberID, setMerchantMemberID] = useState("20241107");
   const [Token, setToken] = useState("");
   const [Language, setLanguage] = useState(ECPay.Language.zhTW); //ECPay.Language.enUS
   const [ServerType, setServerType] = useState("Stage");
   const [IsLoading, setIsLoading] = useState(1);
   
   const [MerchantTradeNo, setMerchantTradeNo] = useState("");
-   const backendurl = "ecpay-bindcard-back.vercel.app";
+  const backendurl = "https://ecpay-bindcard-back.vercel.app";
   //const backendurl = "http://localhost:3000";
 
   return (
     <Router>
       <Routes>
+
+        {/* <Route path="/"
+        element={<Welcome backendurl={backendurl}/>}
+        
+        /> */}
+
         <Route
           path="/"
           element={
