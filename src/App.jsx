@@ -24,7 +24,7 @@ export default function App() {
   }
 
   const [MerchantID, setMerchantID] = useState("3002607");
-  const [MerchantMemberID, setMerchantMemberID] = useState("20241107");
+  const [MerchantMemberID, setMerchantMemberID] = useState("abc123");
   const [Token, setToken] = useState("");
   const [Language, setLanguage] = useState(ECPay.Language.zhTW); //ECPay.Language.enUS
   const [ServerType, setServerType] = useState("Stage");
